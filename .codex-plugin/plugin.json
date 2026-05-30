@@ -1,13 +1,13 @@
 {
   "name": "search-first",
   "version": "0.1.0",
-  "description": "Injects search-first guidance into Codex prompts through UserPromptSubmit hooks when a request is not trivial local/text work.",
+  "description": "Injects Knowledge-First, Web-Fallback guidance into Codex prompts through UserPromptSubmit hooks when a request is not trivial local/text work.",
   "keywords": ["codex", "hooks", "skills", "web-search", "developer-workflow"],
   "skills": "./skills/",
   "interface": {
-    "displayName": "Search First",
-    "shortDescription": "Injects search instructions before coding when fresh or unfamiliar facts may matter",
+    "displayName": "Knowledge First",
+    "shortDescription": "Checks personal JSON knowledge before falling back to web search",
     "category": "Developer Tools",
-    "capabilities": ["Read"]
+    "capabilities": ["Read", "Write"]
   }
 }

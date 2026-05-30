@@ -1,25 +1,28 @@
 ---
 name: search-first
-description: Use when Search-First hook context is present, or before development/implementation/debugging/architecture/plugin/SDK/API/framework work where the request is not trivial local/text work. Follow injected search terms and perform web search before editing or making technical claims.
+description: Use when Knowledge-First hook context is present. The hook is injected on every prompt; use personal JSON Wiki entries first, and if there is no useful Wiki hit for a technical implementation/reference task, perform the injected web searches before implementation.
 ---
 
-# Search First
+# Knowledge First
 
-If the prompt contains `[Search-First]` injected context, obey it before implementation.
+If the prompt contains `[Knowledge-First]` injected context, obey it before implementation.
 
-Do not treat the hook as having already searched. The hook only suggested search terms. You must perform the actual web search.
+Do not treat the hook as having already searched the web. The hook can read local Wiki JSON, but Codex must perform actual web search when the injected context requires it.
 
 ## Workflow
 
-1. Read the injected Search-First context.
-2. If the user explicitly says no-web/local-only, do not search.
-3. Otherwise search the suggested terms before editing files or making technical claims.
-4. Prefer official docs/help center, official repositories, release notes, and maintainer documentation.
-5. Summarize evidence in 1-3 lines.
-6. Continue with repo inspection, implementation, and verification.
+1. Read the injected Knowledge-First context.
+2. If the context says no web search is required, stay on the no-web path.
+3. Use matching Wiki entries first when they are relevant.
+4. If the context includes web search questions, search them before editing files or making technical claims.
+5. If the context has matching Wiki entries and no required web search, use those entries first and decide whether web search is still needed.
+6. Prefer official docs/help center, official repositories, release notes, and maintainer documentation.
+7. Summarize evidence in 1-3 lines.
+8. Save reusable development knowledge to the personal JSON wiki with `scripts/knowledge-wiki.mjs` when it will help future sessions.
+9. Continue with repo inspection, implementation, and verification.
 
 ## Trivial Work
 
-Skip search only for explicit no-web/local-only work, provided-text translation or cleanup, specific local-file summaries, repo-local lookups, mechanical edits, or command-output explanations.
+The hook still appears on trivial or no-web prompts. In those cases, follow the no-web decision in the injected context.
 
-When in doubt, search first.
+When in doubt, follow the injected context literally: Wiki first, then web only when required.

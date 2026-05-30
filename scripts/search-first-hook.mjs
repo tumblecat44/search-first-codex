@@ -1,6 +1,17 @@
 #!/usr/bin/env node
+import { execFileSync } from "node:child_process";
 import { appendFileSync, readFileSync } from "node:fs";
-import { buildAdditionalContext, classifyPrompt, extractPrompt } from "./prompt-classifier.mjs";
+import { dirname, join } from "node:path";
+import { fileURLToPath } from "node:url";
+import {
+  buildAdditionalContext,
+  buildKnowledgeFirstContext,
+  buildPassiveContext,
+  classifyPrompt,
+  extractPrompt,
+  knowledgeLookupQuery,
+  requiresFreshWebCheck,
+} from "./prompt-classifier.mjs";
 
 function readStdin() {
   try {
@@ -23,6 +34,27 @@ function writeDiagnosticLog(entry) {
   appendFileSync(logPath, `${JSON.stringify({ ...entry, timestamp: new Date().toISOString() })}\n`);
 }
 
+function searchWiki(queries) {
+  const query = queries.join(" ");
+  if (!query.trim()) {
+    return [];
+  }
+
+  const scriptPath = join(dirname(fileURLToPath(import.meta.url)), "knowledge-wiki.mjs");
+
+  try {
+    const stdout = execFileSync(process.execPath, [scriptPath, "search", query, "--json", "--limit", "3"], {
+      encoding: "utf8",
+      stdio: ["ignore", "pipe", "ignore"],
+      timeout: 500,
+    });
+    const parsed = JSON.parse(stdout);
+    return Array.isArray(parsed.results) ? parsed.results : [];
+  } catch {
+    return [];
+  }
+}
+
 const raw = readStdin();
 
 try {
@@ -31,22 +63,46 @@ try {
   const result = classifyPrompt(prompt);
 
   if (result.decision !== "inject") {
-    writeDiagnosticLog({ decision: result.decision, reason: result.reason, queryCount: 0 });
-    writeJson({});
+    const wikiResults = searchWiki([knowledgeLookupQuery(prompt)]);
+    writeDiagnosticLog({
+      decision: result.decision,
+      reason: result.reason,
+      queryCount: 0,
+      wikiResultCount: wikiResults.length,
+      hookInjected: true,
+      requiresWebSearch: false,
+    });
+    writeJson({
+      hookSpecificOutput: {
+        hookEventName: "UserPromptSubmit",
+        additionalContext: buildPassiveContext(result, wikiResults),
+      },
+    });
     process.exit(0);
   }
+
+  const wikiResults = searchWiki(result.queries);
+  const freshWebCheck = requiresFreshWebCheck(prompt);
 
   writeDiagnosticLog({
     decision: result.decision,
     reason: result.reason,
     queryCount: result.queries.length,
     queries: result.queries,
+    wikiResultCount: wikiResults.length,
+    requiresFreshWebCheck: freshWebCheck,
+    hookInjected: true,
+    requiresWebSearch: true,
   });
 
   writeJson({
     hookSpecificOutput: {
       hookEventName: "UserPromptSubmit",
-      additionalContext: buildAdditionalContext(result),
+      additionalContext: wikiResults.length
+        ? buildKnowledgeFirstContext(result, wikiResults, {
+            requiresFreshWebCheck: freshWebCheck,
+          })
+        : buildAdditionalContext(result),
     },
   });
 } catch (error) {
