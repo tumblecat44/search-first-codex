@@ -1,0 +1,4 @@
+{
+  "hook_event_name": "UserPromptSubmit",
+  "prompt": "검색하지 말고 SPEC.md만 요약해줘."
+}

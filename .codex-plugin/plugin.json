@@ -1,0 +1,13 @@
+{
+  "name": "search-first",
+  "version": "0.1.0",
+  "description": "Injects search-first guidance into Codex prompts through UserPromptSubmit hooks when a request is not trivial local/text work.",
+  "keywords": ["codex", "hooks", "skills", "web-search", "developer-workflow"],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Search First",
+    "shortDescription": "Injects search instructions before coding when fresh or unfamiliar facts may matter",
+    "category": "Developer Tools",
+    "capabilities": ["Read"]
+  }
+}

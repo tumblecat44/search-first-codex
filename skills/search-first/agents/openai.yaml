@@ -1,0 +1,3 @@
+display_name: Search First
+short_description: Searches before coding when fresh or unfamiliar technical facts may matter.
+default_prompt: Search before implementation when Search-First context is present.

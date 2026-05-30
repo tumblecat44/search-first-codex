@@ -1,0 +1,20 @@
+{
+  "name": "search-first-codex",
+  "interface": {
+    "displayName": "Search First Codex"
+  },
+  "plugins": [
+    {
+      "name": "search-first",
+      "source": {
+        "source": "local",
+        "path": "."
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Developer Tools"
+    }
+  ]
+}

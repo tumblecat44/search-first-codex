@@ -1,0 +1,4 @@
+{
+  "hook_event_name": "UserPromptSubmit",
+  "prompt": "repo 안에서 Button 컴포넌트 위치만 찾아줘."
+}

@@ -1,0 +1,4 @@
+{
+  "hook_event_name": "UserPromptSubmit",
+  "prompt": "코덱스 플러그인 만들거임. SPEC 만들자."
+}

@@ -1,0 +1,4 @@
+{
+  "hook_event_name": "UserPromptSubmit",
+  "prompt": "Next.js 앱에 Supabase auth 붙이고 Vercel에 배포되게 해줘."
+}
