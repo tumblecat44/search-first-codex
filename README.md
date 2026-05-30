@@ -6,6 +6,8 @@ The hook does not perform web search. It reads local JSON knowledge and injects 
 
 Search First also includes a small personal Knowledge Wiki CLI. It stores reusable development knowledge from search sessions in JSON so later sessions can search and reuse what was already learned.
 
+The goal prompt writing history for submission is recorded in `docs/goal-prompt-history.md`.
+
 ## What It Does
 
 - Injects `[Knowledge-First]` guidance on every prompt.
@@ -160,4 +162,5 @@ printf '%s\n' '{"title":"Codex hook additionalContext","query":"Codex UserPrompt
 - `tests/search-first-hook.test.mjs`
 - `tests/knowledge-wiki.test.mjs`
 - `tests/fixtures/*.json`
+- `docs/goal-prompt-history.md`
 - `SPEC.md`
